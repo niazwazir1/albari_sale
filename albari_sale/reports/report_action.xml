@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="sale_report_custom" model="report.paperformat">
+            <field name="name">Sale Paper Format</field>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">7.00</field>
+            <field name="margin_right">7.00</field>
+            <field name="header_spacing">5</field>
+            <field name="dpi">90</field>
+        </record>
+
+
+        <record id="albari_sale_action_id" model="ir.actions.report">
+            <field name="name">Sale Estimation Report</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="report_name">albari_sale.custom_template</field>
+            <field name="report_file">albari_sale.custom_template</field>
+            <field name="paperformat_id" ref="albari_sale.sale_report_custom"/>
+        </record>
+
+
+        <record id="purchase_report_custom" model="report.paperformat">
+            <field name="name">Purchase Paper Format</field>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">7.00</field>
+            <field name="margin_right">7.00</field>
+            <field name="header_spacing">5</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="albari_purchase_action_id" model="ir.actions.report">
+            <field name="name">Purchase Estimation Report</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name="report_name">albari_sale.purchase_custom_template</field>
+            <field name="report_file">albari_sale.purchase_custom_template</field>
+            <field name="paperformat_id" ref="purchase_report_custom"/>
+        </record>
+
+
+        <record id="custom_production_report" model="report.paperformat">
+            <field name="name">Custom Production Paper Format</field>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">7.00</field>
+            <field name="margin_right">7.00</field>
+            <field name="header_spacing">5</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="custom_production_action_id" model="ir.actions.report">
+            <field name="name">Order Processing Report</field>
+            <field name="model">processing.production.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="binding_model_id" ref="albari_sale.model_processing_production_order"/>
+            <field name="report_name">albari_sale.custom_production_template</field>
+            <field name="report_file">albari_sale.custom_production_template</field>
+            <field name="paperformat_id" ref="custom_production_report"/>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bracket_shapes,bracket_shapes,model_bracket_shapes,base.group_user,1,1,1,1
+access_wizard.product.change,wizard.product.change,model_wizard_product_change,base.group_user,1,1,1,1
+access_check.order,check.order,model_check_order,base.group_user,1,1,1,1
+access_stock.check.line,stock.check.line,model_stock_check_line,base.group_user,1,1,1,1
+access_processing.production.order,access.processing.production.order,model_processing_production_order,base.group_user,1,1,1,1
+access_order.processing.line,access.order.processing.line,model_order_processing_line,sales_team.group_sale_salesman,1,1,1,1

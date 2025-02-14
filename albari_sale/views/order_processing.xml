@@ -1,0 +1,139 @@
+<odoo>
+
+    <record id="view_custom_production_order_tree" model="ir.ui.view">
+        <field name="name">custom.production.order.tree</field>
+        <field name="model">processing.production.order</field>
+        <field name="arch" type="xml">
+            <tree string="Production Orders"
+                  decoration-success="status == 'ready'"
+                  decoration-info="status == 'in_progress'"
+                  decoration-danger="status == 'cancel'"
+                  decoration-muted="status == 'new'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="sale_id" readonly="1"/>
+                <field name="date"/>
+                <field name="status" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_custom_production_order_form" model="ir.ui.view">
+        <field name="name">custom.production.order.form</field>
+        <field name="model">processing.production.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_set_new" type="object" string="Set New" class="btn-primary"
+                            invisible="status == 'new'"/>
+                    <button name="action_set_in_progress" type="object" string="Set In Progress" class="btn-primary"
+                            invisible="status == 'in_progress'"/>
+                    <button name="action_set_ready" type="object" string="Set Ready" class="btn-success"
+                            invisible="status == 'ready'"/>
+                    <button name="action_quality" type="object" string="Quality Check" class="btn-primary"
+                            invisible="status == 'quality'"/>
+                    <button name="action_set_cancel" type="object" string="Cancel" class="btn-danger"
+                            invisible="status == 'cancel'"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+
+                            <field name="partner_id"/>
+                            <field name="sale_id" readonly="1"/>
+                            <!--                            <field name="purchase_id" readonly="1"-->
+                            <!--                                   modifiers="{'invisible': [['purchase_id', '=', False]]}"/>-->
+
+                            <field name="date"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Processing lines">
+                            <field name="processing_line_id">
+                                <tree>
+                                    <field name="product_id"/>
+                                    <field name="org_length"/>
+                                    <field name="org_width"/>
+                                    <field name="unit"/>
+                                    <field name="qty"/>
+                                    <field name="shape_id"/>
+                                    <field name="shape_id_image" widget="image"/>
+                                    <field name="remarks"/>
+
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Kanban View for Custom Production Order -->
+    <record id="view_custom_production_order_kanban" model="ir.ui.view">
+        <field name="name">custom.production.order.kanban</field>
+        <field name="model">processing.production.order</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard o_emphasize_colors">
+                <field name="name"/>
+                <field name="status"/>
+                <field name="sale_order_id"/>
+                <!-- <field name="shape_id"/> -->
+                <!-- <field name="shape_id_image"/> -->
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_image">
+                                <!-- Display Shape Image using kanban_image -->
+                                <img t-att-src="kanban_image('custom.production.order', 'shape_id_image', record.id.raw_value)"
+                                     alt="image"/>
+                            </div>
+                            <div class="o_kanban_card_content">
+                                <div class="oe_kanban_details">
+                                    <!-- Production Order Name -->
+                                    <div>
+                                        <strong t-esc="record.name.value"/>
+                                    </div>
+
+                                    <!-- Sale Order Name -->
+                                    <div>Sale Order:
+                                        <span t-esc="record.sale_order_id.value"/>
+                                    </div>
+
+                                    <!-- Status -->
+                                    <div>Status:
+                                        <span t-esc="record.status.value"/>
+                                    </div>
+
+                                    <!-- Shape -->
+                                    <!-- <div>Shape: <span t-esc="record.shape_id.value"/></div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_custom_production_order" model="ir.actions.act_window">
+        <field name="name">Order Processing</field>
+        <field name="res_model">processing.production.order</field>
+        <field name="domain">[('status', '!=','cancel')]</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <menuitem id="menu_custom_production" name="Order processing"
+              web_icon="custom_production_from_sales,static/src/img/process.png"/>
+    <menuitem id="menu_custom_production_order" parent="menu_custom_production" name="Order Processing"
+              action="action_custom_production_order"/>
+</odoo>

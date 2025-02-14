@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="view_sale_order_action_wizard_form" model="ir.ui.view">
+            <field name="name">stock check</field>
+            <field name="model">check.order</field>
+            <field name="arch" type="xml">
+                <form string="Choose Action">
+                    <header>
+                        <button type="object" name="action_draft" string="Reset to Draft" class="oe_highlight"/>
+<!--                        <button type="object" name="action_random" string="Random" class="oe_highlight"-->
+<!--                                invisible="state not in 'draft' and not check_order_id.operation_type"/>-->
+                        <button type="object" name="action_random" string="Random" class="oe_highlight"
+                                invisible="state not in 'draft' and check_order_id.operation_type"/>
+
+                        <!--                        invisible="state not in ('draft')"/>-->
+
+                        <button type="object" name="action_purchase_order" string="Purchase" class="oe_highlight"
+                                invisible="state not in ('draft')"/>
+                        <button type="object" name="action_order_processing" string="Processing" class="oe_highlight"
+                                invisible="state not in ('draft')"/>
+                        <button name="confirm_combo" string="Combo" type="object" class="btn-primary"
+                                invisible="state not in ('draft')"/>
+                        <!--                        <button string="Cancel" name="action_cancel" class="btn-danger" type="object"/>-->
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,random,order_processing,purchase_order,combo,cancel"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_processing" type="object"
+                                    icon="fa-truck" invisible="state  in ('draft')"
+                                    string="Process"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="order_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <group>
+
+                                <field name="date"/>
+
+
+                            </group>
+
+
+                        </group>
+
+                        <notebook>
+                            <page string="Lines">
+                                <field name="check_order_id">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="length"/>
+                                        <field name="width"/>
+                                        <field name="unit"/>
+                                        <field name="qty"/>
+                                        <field name="shape_id"/>
+                                        <field name="shape_id_image" widget="image"/>
+                                        <field name="operation_type"/>
+                                        <field name="remarks"/>
+
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_tree_view_tree" model="ir.ui.view">
+            <field name="name">tree_tree_view_tree</field>
+            <field name="model">check.order</field>
+            <field name="arch" type="xml">
+                <tree string="tree_tree_tree">
+                    <field name="partner_id"/>
+                    <field name="order_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="custom_wizard_action" model="ir.actions.act_window">
+            <field name="name">stock check</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">check.order</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!--        This Menu Item must have a parent and an action-->
+        <!--        <menuitem id="action_root_menu" name="Check Orders" parent="sale.sale_menu_root" action="custom_wizard_action"-->
+        <!--                  sequence="09"/>-->
+
+
+    </data>
+</odoo>

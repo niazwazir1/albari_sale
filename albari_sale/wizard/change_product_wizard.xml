@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_order_line_tree_custom" model="ir.ui.view">
+        <field name="name">sale.order.line.tree.testing.custom</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="product_id"/>
+                <field name="name"/>
+                <field name="org_length"/>
+                <field name="org_width"/>
+                <field name="unit"/>
+                <field name="product_uom_qty"/>
+                <field name="price_unit"/>
+                <field name="price_subtotal"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="change_product_wizard_view_form" model="ir.ui.view">
+        <field name="name">wizard.product.change.form</field>
+        <field name="model">wizard.product.change</field>
+        <field name="arch" type="xml">
+            <form string="Change Products in Order Lines">
+                <group class="oe_title">
+                    <field name="order_line_ids"
+                           context="{'default_order_id': active_id, 'tree_view_ref': 'albari_sale.view_order_line_tree_custom'}">
+                        <tree>
+                            <field name="product_id"/>
+                            <field name="org_length"/>
+                            <field name="org_width"/>
+                        </tree>
+                    </field>
+                    <field name="product_id"/>
+                    <field name="custom_price"/>
+                </group>
+                <footer>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    <button name="action_wizard_done" string="Confirm" type="object" class="btn-primary"
+                    />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="change_product_wizard_action" model="ir.actions.act_window">
+        <field name="name">Change Product</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wizard.product.change</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="change_product_wizard_view_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="inherit_sale_order_view_form" model="ir.ui.view">
+        <field name="name">sale.order.form.view.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="%(albari_sale.change_product_wizard_action)d"
+                        string="Change Product"
+                        class="btn-primary" type="action"
+                        invisible="state not in 'draft'"
+                />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

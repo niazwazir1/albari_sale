@@ -1,0 +1,9 @@
+<odoo>
+    <record id="seq_custom_production_order" model="ir.sequence">
+        <field name="name">Custom Production Order</field>
+        <field name="code">custom.production.order</field>
+        <field name="prefix">CPO-</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

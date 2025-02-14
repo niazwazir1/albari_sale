@@ -1,0 +1,69 @@
+<odoo>
+    <data>
+        <!-- Tree view -->
+        <record model="ir.ui.view" id="bracket_shapes_list">
+            <field name="name">bracket.shapes</field>
+            <field name="model">bracket.shapes</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="shape_type"/>
+                    <field name="image"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form view -->
+        <record model="ir.ui.view" id="bracket_shapes_form">
+            <field name="name">Bracket Shapes Form</field>
+            <field name="model">bracket.shapes</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="image" widget="image" class="oe_avatar" nolabel="1"/>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h2><field name="name" required="1"/></h2>
+                            <h5>
+                                <label for="service_id" string="Product/Service"/>:
+                                <field name="service_id" required="1"/>
+                            </h5>
+                        </div>
+                        <group>
+                            <group string="Operations">
+                                <field name="shape_type"/>
+                                <field name="operation_intent"/>
+                                <field name="sides" placeholder="e.g., 1,2,5"
+                                    modifiers="{'invisible': [('operation_intent', '=', 'area')]}"/>
+                                <field name="extra_operations"/>
+                                <field name="extra_charge"
+                                    modifiers="{'invisible': [('extra_operations', '=', False)]}"/>
+                            </group>
+                            <group string="Shape Details">
+                                <div class="image_container">
+                                    <field name="shape_image" widget="image" class="shape_image"/>
+                                </div>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record model="ir.actions.act_window" id="action_bracket_shapes">
+            <field name="name">Geometrical Shapes</field>
+            <field name="res_model">bracket.shapes</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create your first record!</p>
+            </field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem name="Geometrical Shapes"
+                  action="action_bracket_shapes"
+                  parent="sale.menu_sale_config"
+                  id="bracket_shapes_menu_root"/>
+    </data>
+</odoo>

@@ -1,0 +1,107 @@
+<?xml version="1.0" ?>
+<odoo>
+	<data noupdate="1">
+
+		<record id="biometric_attendances" model="ir.cron">
+			<field name="name">Fetch Biometric Logs</field>
+			<field name="priority">5</field>
+			<field name="doall">False</field>
+			<field name="active">True</field>
+			<field name="numbercall">-1</field>
+			<field name="interval_number">1</field>
+			<field name="interval_type">days</field>
+			<field name="model_id" ref="model_biomteric_device_info"/>
+			<field name="state">code</field>
+			<field name="code">model.fetch_attendance([])</field>
+		</record>
+
+		<record id="sync_biometric_attendances" model="ir.cron">
+			<field name="name">Sync Attendance</field>
+			<field name="priority">5</field>
+			<field name="doall">False</field>
+			<field name="active">True</field>
+			<field name="numbercall">-1</field>
+			<field name="interval_number">1</field>
+			<field name="interval_type">days</field>
+			<field name="model_id" ref="model_biomteric_device_info"/>
+			<field name="state">code</field>
+			<field name="code">model.action_sync_attendance()</field>
+		</record>
+
+		<record id="cron_check_port" model="ir.cron">
+			<field name="name">Biometric Port Checker</field>
+			<field name="priority">5</field>
+			<field name="doall">False</field>
+			<field name="active">True</field>
+			<field name="numbercall">-1</field>
+			<field name="interval_number">2</field>
+			<field name="interval_type">hours</field>
+			<field name="model_id" ref="model_biomteric_device_info"/>
+			<field name="state">code</field>
+			<field name="code">model.action_check_biometric_port()</field>
+		</record>
+
+	<!--	<record id="sync_biometric_attendances_eod" model="ir.cron">
+			<field name="name">Sync Attendance: EOD Report</field>
+			<field name="priority">5</field>
+			<field name="doall">False</field>
+			<field name="active">True</field>
+			<field name="numbercall">-1</field>
+			<field name="interval_number">1</field>
+			<field name="interval_type">days</field>
+			<field name="model_id" ref="model_hr_draft_attendance"/>
+			<field name="state">code</field>
+			<field name="code">model.action_sync_attendance_eod()</field>
+		</record>-->
+
+		<record id="biometric_user_sequence" model="ir.sequence">
+			<field name="name">Biometric User Sequence</field>
+			<field name="code">biometric.user.sequence</field>
+			<field name="padding">6</field>
+			<field name="implementation">no_gap</field>
+			<field name="number_next_actual">2</field>
+		</record>
+
+		<record id="server_action_invalidate_log" model="ir.actions.server">
+			<field name="name">Invalidate Log</field>
+			<field name="type">ir.actions.server</field>
+			<field name="model_id" ref="model_hr_draft_attendance"/>
+			<field name="state">code</field>
+			<field name="code">
+				if records:
+				action = records.action_invalidate_log()
+			</field>
+			<field name="binding_model_id" ref="model_hr_draft_attendance"/>
+		</record>
+
+		<record id="server_action_force_sync" model="ir.actions.server">
+			<field name="name">Force Sync Log</field>
+			<field name="type">ir.actions.server</field>
+			<field name="model_id" ref="model_hr_draft_attendance"/>
+			<field name="state">code</field>
+			<field name="code">
+				if records:
+				action = records.action_force_sync()
+			</field>
+			<field name="binding_model_id" ref="model_hr_draft_attendance"/>
+		</record>
+
+		<record id="server_action_mark_activity_done" model="ir.actions.server">
+			<field name="name">Activity Done</field>
+			<field name="type">ir.actions.server</field>
+			<field name="model_id" ref="model_hr_draft_attendance"/>
+			<field name="state">code</field>
+			<field name="code">
+				if records:
+				action = records.action_mark_activity_done()
+			</field>
+			<field name="binding_model_id" ref="model_hr_draft_attendance"/>
+		</record>
+
+
+		<record id="sync_days" model="ir.config_parameter">
+			<field name="key">hr_attendance_zktecho.sync_days</field>
+			<field name="value" eval="3"/>
+		</record>
+	</data>
+</odoo>

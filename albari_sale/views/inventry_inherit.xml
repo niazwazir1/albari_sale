@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="stock_move_id_albari" model="ir.ui.view">
+            <field name="name">Stock Move</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="inherit_id"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='product_uom_qty']"
+                       position="before">
+                    <field name="org_length"/>
+                    <field name="org_width"/>
+                    <field name="unit"/>
+                    <field name="shape_id"/>
+                    <field name="shape_id_image" widget="image"/>
+                    <field name="remarks"/>
+
+
+                </xpath>
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

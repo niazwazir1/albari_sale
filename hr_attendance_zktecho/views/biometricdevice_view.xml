@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+	<record model="ir.actions.act_window" id="action_attendance_logs">
+		<field name="name">Attendances Logs</field>
+		<field name="res_model">hr.draft.attendance</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('device_id', '=', active_id)]</field>
+	</record>
+
+	<!-- Device Information -->
+	<record model="ir.ui.view" id="biomtericdeviceinfo_tree">
+		<field name="name">Device Information</field>
+		<field name="model">biomteric.device.info</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name" />
+				<field name="ipaddress" />
+				<field name="portnumber" />
+				<field name="private_ipaddress" />
+				<field name="zk_record_rate" widget="progressbar" string="Storage"/>
+			</tree>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="biomtericdeviceinfo_search">
+		<field name="name">Device Information</field>
+		<field name="model">biomteric.device.info</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name" operator="ilike" />
+				<field name="ipaddress" operator="ilike" />
+				<separator />
+				<filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+				<separator/>
+				<filter name="group_name" string="By Name" context="{'group_by': 'name'}" />
+				<filter name="group_ipaddress" string="By IP Address"
+						context="{'group_by': 'ipaddress'}" />
+				<filter name="group_portnumber" string="By Port"
+						context="{'group_by': 'portnumber'}" />
+			</search>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="biometric_device_info">
+		<field name="name">Device Information</field>
+		<field name="model">biomteric.device.info</field>
+		<field name="arch" type="xml">
+			<form string="Device Configuration">
+				<sheet string="Device Configuration">
+					<div class="oe_button_box" name="buttons">
+						<button icon="fa-wifi" name="test_connection_device"
+								type="object" string="Test Connection" class="oe_stat_button"
+								help="Test connection to the attendance device" />
+						<button icon="fa-info" name="action_get_device_info"
+								type="object" string="Get Device Info" class="oe_stat_button"
+								help="Get Other details of the device" />
+
+						<button icon="fa-power-off" name="action_restart_device"
+								type="object" string="Restart" class="oe_stat_button"
+								help="Restart Device" />
+						<button icon="fa-upload"
+								name="%(hr_attendance_zktecho.action_upload_employees)d"
+								type="action" string="Upload Employees" class="oe_stat_button"
+								help="Upload employees to device" />
+						<button icon="fa-user"
+								name="action_get_users"
+								type="object" string="Download Users" class="oe_stat_button"
+								help="Download employees to device" />
+						<button icon="fa-download" name="download_attendance_oldapi"
+								type="object" string="Download Attendance" class="oe_stat_button"
+								help="Download Attendance from device" />
+						<button icon="fa-refresh" name="action_sync_attendance"
+								type="object" string="Sync Logs" class="oe_stat_button"
+								help="Sync logs from device to attendance" />
+
+						<button icon="fa-random" name="action_transfer_data_biometric"
+								type="object" string="Transfer Data" class="oe_stat_button"
+								help="Sync logs from device to attendance"
+								groups="base.group_system"
+						/>
+
+						<button icon="fa-trash" name="clear_attendance_device"
+								type="object" string="Clear Attendance" class="oe_stat_button"
+								confirm="Are you sure?"
+								help="Clear Attendance from device" />
+						<button icon="fa-clock-o" name="%(hr_attendance_zktecho.action_attendance_logs)d"
+								type="action" string="Biometric Logs" class="oe_stat_button"
+								help="Attendance from device" context="{'search_default_filter_unmoved': 1}"/>
+
+					</div>
+					<h1>
+						<field name="name" placeholder="Device Name" />
+					</h1>
+					<h2>
+						<field name="ipaddress" placeholder="IP Address" />
+					</h2>
+					<group>
+						<group>
+							<field name="portnumber" placeholder="e.g. 4370"
+								   help="Port which allows connection to the device" />
+							<field name="password" password="True" placeholder="device password" help="Specify password if the biometric device is password protected"/>
+							<field name="private_ipaddress" />
+							<field name="sign_in"/>
+							<field name="sign_out"/>
+							<field name="action" help="Actions Performed on the machine whether sign-in or sign-out or both" />
+							<field name="sequence_id" help="Default sequence for users" readonly="1"/>
+						</group>
+						<group>
+							<field name="ommit_ping" help="Do not attempt to ping the IP before connecting to the device" />
+							<field name="protocol" help="UDP is good for older devices with smaller amounts of data, TCP should be used with devices that have larger amounts of data"/>
+							<field name="time_zone" />
+							<field name="fetch_days" help="If -1 means all attendances will be fetched otherwise will get the attendance from last number of days specified" />
+							<field name="api_type" help="Legacy API is used by older devices, New API is used by modern devices which usually support face recognition as well. Using wrong API will result in invalid attendance status." />
+							<field name="time_out"/>
+						</group>
+					</group>
+					<notebook>
+						<page string="Device Employees">
+							<field name="device_employee_ids">
+								<tree create="0" edit="0">
+									<field name="name"/>
+									<field name="employee_id"/>
+									<field name="attendance_id"/>
+									<field name="card_number" readonly="1"/>
+									<field name="access_type" readonly="1"/>
+								</tree>
+							</field>
+
+						</page>
+						<page string="Other Info">
+							<group>
+								<group>
+									<field name="zk_model" readonly="1"/>
+									<!--<label for="zk_record_count" string="Device Records"/>
+									<div class="d-flex">
+										<field name="zk_record_count"  readonly="1"/> /
+										<field name="zk_record_count_cap"  readonly="1"/>
+									</div>-->
+									<field name="zk_record_rate" widget="progressbar" string="Storage"
+										   options="{'current_value': 'zk_record_count', 'max_value': 'zk_record_count_cap', 'editable': false}"/>
+									<field name="exclude_sync"/>
+									<!--<field name="cron_id"/>-->
+									<field name="code"/>
+								</group>
+								<group>
+									<field name="device_datetime" class="oe_inline"/>
+									<div>
+										<button name="action_update_datetime" type="object" class="btn-link oe_inline"
+												context="{'search_default_partner_id': active_id}"
+												string="Update Datetime" widget="statinfo"/>
+									</div>
+								</group>
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers"
+						   help="Follow the device to keep track of its configurations" />
+					<field name="message_ids" widget="mail_thread" />
+				</div>
+			</form>
+		</field>
+	</record>
+
+	<!-- Action for Biometric Device Information -->
+	<record model="ir.actions.act_window" id="biomtericdeviceinfo_action">
+		<field name="name">Device Information</field>
+		<field name="res_model">biomteric.device.info</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+</odoo>

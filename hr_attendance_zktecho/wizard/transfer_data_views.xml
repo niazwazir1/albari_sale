@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="transfer_data_forms" model="ir.ui.view">
+		<field name="name">transfer.data.form</field>
+		<field name="model">transfer.data</field>
+		<field name="arch" type="xml">
+			<form string="Transfer Data">
+				<sheet>
+					<h3>
+						Transfer Data to new Device.
+					</h3>
+					<group>
+						<field name="old_device_id" options="{'no_create':1, 'no_edit':1}" readonly="1"/>
+						<!--<field name="device_id" options="{'no_create':1, 'no_edit':1}" domain="[('id','!=',old_device_id)]"/>-->
+						<field name="device_ids" options="{'no_create':1, 'no_edit':1}"
+							   domain="[('id','!=',old_device_id)]"
+							   widget="many2many_tags"
+						/>
+					</group>
+
+					<field name="employee_ids" options="{'always_reload': True}" domain="[('device_id','=',old_device_id),('employee_id','!=',False)]">
+						<tree>
+							<field name="name"/>
+							<field name="employee_id"/>
+							<field name="attendance_id"/>
+							<field name="new_biometric_id" optional="hide"/>
+							<field name="card_number" />
+							<field name="device_id" />
+						</tree>
+						<form string="Change Biometric User ID">
+							<sheet>
+								<group col="4">
+									<!--<field name="name" help="Employee" readonly="1"/>
+									<field name="employee_id" help="Employee"/>
+									<field name="attendance_id" help="Linked Attendance device Id for this employee" readonly="1"/>
+									<field name="device_id" help="Associated Device with the employee" readonly="1"/>-->
+									<field name="new_biometric_id" />
+								</group>
+							</sheet>
+						</form>
+					</field>
+
+					<footer>
+						<button string="Transfer" name="action_transfer" type="object" default_focus="1" class="oe_highlight"/>
+						or
+						<button string="Cancel" class="oe_link" special="cancel"/>
+					</footer>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<!--	<record id="action_transfer_data_biometric" model="ir.actions.act_window">
+            <field name="name">Transfer Data</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">transfer.data</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>-->
+</odoo>

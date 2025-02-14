@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="custom_production_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <div class="row">
+                            <div class="col-5">
+                                <img t-att-src="image_data_uri(o.company_id.logo)"
+                                     style="max-width: 8rem; height: auto; display: block; margin: left auto;"
+                                     alt="Company Logo"/>
+                            </div>
+                            <div class="col-6">
+                                <table style="border-collapse: collapse; width: 90%;" border="1">
+                                    <tr>
+                                        <td style="width: 30%; border: 1px solid black; padding: 5px;">Voucher No</td>
+                                        <td style="width: 70%; border: 1px solid black; padding: 5px;">
+                                            <t t-esc="o.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 30%; border: 1px solid black; padding: 5px;">Name</td>
+                                        <td style="width: 70%; border: 1px solid black; padding: 5px;">
+                                            <t t-esc="o.partner_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 30%; border: 1px solid black; padding: 5px;">Address</td>
+                                        <td style="width: 70%; border: 1px solid black; padding: 5px;">
+                                            <t t-esc="', '.join(filter(None, [o.partner_id.street, o.partner_id.street2,
+                                                o.partner_id.city, o.partner_id.country_id.name, o.partner_id.state_id.name]))"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 30%; border: 1px solid black; padding: 5px;">Contact No
+                                        </td>
+                                        <td style="width: 70%; border: 1px solid black; padding: 5px;">
+                                            <t t-esc="o.partner_id.phone"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h1>
+                                    <t t-esc="o._name"/>
+                                </h1>
+
+                            </div>
+                        </div>
+                        <div class="row" style="width:100%;">
+                            <div class="col-12" style="padding-top:20px;">
+                                <table style="width:100%;border:1px solid black"
+                                       class="table table-bordered border-dark">
+                                    <tr style="border:1px solid black;">
+                                        <td style="font-weight:bold;width:10%;padding-left:5px;">Date &amp; Time:</td>
+                                        <td style="width:20%;border-left:1px solid black;">
+                                            <t t-esc="o.date and o.date.strftime('%d-%m-%Y %H:%M') or ''"/>
+                                        </td>
+                                        <td style="font-weight:bold;width:17%;border-left:1px solid black;padding-left:5px;">
+                                            SalesPerson:
+                                        </td>
+                                        <td style="width:20%;"/>
+                                        <td style="font-weight:bold;width:20%;border-left:1px solid black;padding-left:5px;">
+                                            SalesPerson (No):
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table class="table table-bordered"
+                                       style="border: 1px solid black; margin-top: 20px; width: 100%; border-collapse: collapse;">
+                                    <thead>
+                                        <tr style="font-weight: bold; text-align: center; border: 1px solid black;">
+                                            <th style="border: 1px solid black;">Sr.#</th>
+                                            <th style="border: 1px solid black;">Product</th>
+                                            <th style="border: 1px solid black;">Len</th>
+                                            <th style="border: 1px solid black;">Wid</th>
+                                            <th style="border: 1px solid black;">Pcs</th>
+                                            <th style="border: 1px solid black;">sqft</th>
+                                            <th style="border: 1px solid black;">Shapes</th>
+                                            <th style="border: 1px solid black;">remarks</th>
+                                        </tr>
+                                    </thead>
+                                    <t t-set="Sr" t-value="0"/>
+                                    <tbody style="border: 1px solid black;">
+                                        <t t-foreach="o.processing_line_id" t-as="rec">
+                                            <t t-set="Sr" t-value="Sr + 1"/>
+                                            <tr style="border: 1px solid black; height: 40px;">
+                                                <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                    <t t-esc="Sr"/>
+                                                </td>
+                                                <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                    <t t-esc="rec.product_id.name"/>
+                                                </td>
+                                                <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                    <t t-esc="rec.org_length"/>
+                                                </td>
+                                                <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                    <t t-esc="rec.org_width"/>
+                                                </td>
+                                                <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                    <t t-esc="rec.unit"/>
+                                                </td>
+                                                <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                    <t t-esc="rec.qty"/>
+                                                </td>
+                                                <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                    <t t-if="rec.shape_id.image">
+                                                        <img t-att-src="image_data_uri(rec.shape_id.image)"
+                                                             style="max-width: 50px; height: auto;"
+                                                             alt="Shape Image"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                    </t>
+                                                </td>
+                                                <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                    <t t-esc="rec.remarks"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <hr style="1px solid black"/>
+
+                        <div style="text-align: center; white-space: nowrap; width: 100%;">|
+                            <t t-esc="o.partner_id.name"/>
+                            |
+                            <t t-esc="o.partner_id.email"/>
+                            |
+                            <t t-if="o.partner_id.website">
+                                <t t-esc="o.partner_id.website.replace('http://', '').replace('https://', '')"/>
+                            </t>
+                            |
+                            <t t-esc="o.partner_id.phone"/>
+                            |
+                            <br>
+                                Page: <span class="page"></span> /
+                                <span class="topage"></span>
+                            </br>
+                            |
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
