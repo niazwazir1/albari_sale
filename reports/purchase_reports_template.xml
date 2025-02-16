@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="purchase_custom_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="rec">
+                    <t t-call="web.basic_layout">
+                        <div class="page">
+                            <div class="row">
+                                <div class="col-2">
+                                    <img t-att-src="image_data_uri(rec.company_id.logo)"
+                                         style="max-width: 8rem; height: auto; display: block; margin: left auto;"
+                                         alt="Company Logo"/>
+                                </div>
+                                <div class="col-4" style="padding: 0">
+                                    <div style="float: left; text-align: center;margin-left: 6px 0;">
+                                        <p style="margin: 2px 0; padding: 0;">34_35 aveneno valicono</p>
+                                        <p style="margin: 2px 0; padding: 0;">Info@granite.pk</p>
+                                        <p style="margin: 2px 0; padding: 0;">03347496312</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <table style="border-collapse: collapse; width: 100%;" border="1">
+                                        <tr>
+                                            <td style="width: 30%; border: 1px solid black; padding: 5px;">Est</td>
+                                            <td style="width: 70%; border: 1px solid black; padding: 5px;">
+                                                <t t-esc="rec.sale_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 30%; border: 1px solid black; padding: 5px;">Name</td>
+                                            <td style="width: 70%; border: 1px solid black; padding: 5px;">
+                                                <t t-esc="rec.partner_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 30%; border: 1px solid black; padding: 5px;">Address</td>
+                                            <td style="width: 70%; border: 1px solid black; padding: 5px;">
+                                                <t t-esc="', '.join(filter(None, [rec.partner_id.street, rec.partner_id.street2,
+                                                rec.partner_id.city, rec.partner_id.country_id.name, rec.partner_id.state_id.name]))"/>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 30%; border: 1px solid black; padding: 5px;">Contact No
+                                            </td>
+                                            <td style="width: 70%; border: 1px solid black; padding: 5px;">
+                                                <t t-esc="rec.partner_id.mobile"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h1>Purchase Report</h1>
+                                </div>
+                            </div>
+                            <div class="row" style="width:100%;">
+                                <div class="col-12" style="padding-top:20px;">
+                                    <table style="width:100%;border:1px solid black"
+                                           class="table table-bordered border-darecrk">
+                                        <tr style="border:1px solid black;">
+                                            <td style="font-weight:bold;width:10%;padding-left:5px;">Date &amp; Time:
+                                            </td>
+                                            <td style="width:15%;">
+                                                <span t-esc="context_timestamp(rec.date_order).strftime('%d-%m-%Y %H:%M:%S')"/>
+                                            </td>
+
+                                            <td style="font-weight:bold;width:17%;border-left:1px solid black;padding-left:5px;">
+                                                SalesPerson
+                                            </td>
+                                            <td style="width:17%;padding-left:5px;">
+                                                <span t-field="rec.user_id.name"/>
+                                            </td>
+                                            <td style="width:15%;">
+                                                SalesPerson (No)
+                                            </td>
+                                            <td style="font-weight:bold;width:20%;border-left:1px solid black;padding-left:5px;">
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <!--                                    <t t-foreach="o" t-as="rec">-->
+                                    <table class="table table-bordered"
+                                           style="border: 1px solid black; margin-top: 20px; width: 100%; border-collapse: collapse;">
+                                        <thead>
+                                            <tr style="font-weight: bold; text-align: center; border: 1px solid black;">
+                                                <!--                                                     <th style="border: 1px solid black;">S.N</th> -->
+                                                <th style="border: 1px solid black;">Sr.#</th>
+                                                <th style="border: 1px solid black;">Product</th>
+                                                <th style="border: 1px solid black;">Description</th>
+                                                <th style="border: 1px solid black;">Len</th>
+                                                <th style="border: 1px solid black;">Wid</th>
+                                                <th style="border: 1px solid black;">Pcs</th>
+                                                <th style="border: 1px solid black;">SQFT</th>
+                                                <th style="border: 1px solid black;">Amount<br/>(PKR)
+                                                </th>
+                                                <th style="border: 1px solid black;">Shapes</th>
+                                                <th style="border: 1px solid black;">Notes</th>
+                                                <th style="border: 1px solid black;">remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <t t-set="Sr" t-value="0"/>
+                                        <tbody style="border: 1px solid black;">
+                                            <t t-foreach="rec.order_line" t-as="line">
+                                                <t t-set="Sr" t-value="Sr + 1"/>
+                                                <tr style="border: 1px solid black; height: 40px;">
+                                                    <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                        <t t-esc="Sr"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                        <t t-esc="line.product_id.name"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                        <t t-esc="line.name"/>
+                                                    </td>
+                                                    <!--                                                        <td style="border: 1px solid black; text-align: center; padding: 8px;">-->
+                                                    <!--                                                            <t t-esc="line.org_length"/>-->
+                                                    <!--                                                        </td>-->
+                                                    <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                        <t t-esc="line.org_length"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                        <t t-esc="line.org_width"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                        <t t-esc="line.unit"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                        <t t-esc="line.product_uom_qty"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                        <t t-esc="line.price_unit"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                        <t t-esc="line.is_beveling"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                        <t t-esc="line.shape_id"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                        <t t-esc="line.remarks"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                    <div class="row" style="margin-top: 20px; display: inline-block; width: 100%;">
+                                        <div class="col-6" style="float: left;">
+                                            <h3>Notes</h3>
+                                            <textarea style="height: 70px; border: 1px solid black; padding: 10px;">
+                                                Hi functional how are you
+                                            </textarea>
+                                        </div>
+                                        <div class="col-6" style="float: right; margin-top: 15px;">
+                                            <table style="float: right; border-collapse: collapse; border: 1px solid black; width: 50%;">
+                                                <tr>
+                                                    <td style="text-align: right; font-weight: bold; padding: 5px;">
+                                                        Sub Total:
+                                                    </td>
+                                                    <td style="text-align: right; border: 1px solid black; padding: 5px;">
+                                                        <t t-esc="'{:,.2f}'.format(sum(line.price_subtotal for line in rec.order_line))"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align: right; font-weight: bold; padding: 5px;">
+                                                        Beveling:
+                                                    </td>
+                                                    <td style="text-align: right; border: 1px solid black; padding: 5px;">
+                                                        <t t-esc="rec.beveling_amount"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align: right; font-weight: bold; padding: 5px;">
+                                                        Tax:
+                                                    </td>
+                                                    <td style="text-align: right; border: 1px solid black; padding: 5px;">
+                                                        <t t-esc="', '.join(str(tax.amount) + '%' for tax in line.taxes_id) if line.taxes_id else '0%'"/>
+
+                                                    </td>
+                                                </tr>
+                                                <tr style="font-weight: bold;">
+                                                    <td style="text-align: right; font-weight: bold; padding: 5px;">
+                                                        Grand Total:
+                                                    </td>
+                                                    <td style="text-align: right; border: 1px solid black; padding: 5px;">
+                                                        <t t-esc="'{:,.2f}'.format(line.price_total)"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <hr style="1px solid black"/>
+
+                            <div class="row">
+                                <div class="col-12 text-center" style="margin-bottom:14px;">
+
+                                    |
+                                    <t t-esc="rec.partner_id.name"/>
+                                    |
+                                    <t t-esc="rec.partner_id.email"/>
+                                    <span>Page:
+                                        <span class="page"/>
+                                        /
+                                        <span class="topage"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
