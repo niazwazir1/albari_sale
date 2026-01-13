@@ -8,6 +8,7 @@ class BracketShapes(models.Model):
 
 
     name = fields.Char(string="Name", required=True)
+    description = fields.Char(string="Description", required=True)
     image = fields.Binary()
     shape_image = fields.Binary()
     service_id = fields.Many2one(comodel_name="product.product", string="product/Service")

@@ -14,6 +14,7 @@ class Inventry(models.Model):
     inherit_id = fields.Many2one('sale.order', string='Sale Seq', related='purchase_id.sale_id')
     purchase_id = fields.Many2one('purchase.order')
     production_id = fields.Many2one('processing.production.order')
+    test = fields.Boolean(default=False)
 
     @api.model
     def create(self, vals):
